@@ -1,5 +1,5 @@
 {
-	"name" : "robert/http",
+	"name" : "robert/http-request",
 	"require" : {
 		"robert/datetime" : "0.1"
 	},
