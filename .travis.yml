@@ -1,0 +1,7 @@
+language: php
+php:
+  - '7.1'
+  - nightly
+before_install:
+  - travis_retry composer install --no-dev --no-interaction --prefer-source
+  - cat vendor/composer/autoload_psr4.php

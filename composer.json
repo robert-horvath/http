@@ -1,0 +1,19 @@
+{
+	"name" : "robert/http",
+	"require" : {
+		"robert/datetime" : "0.1"
+	},
+	"require-dev" : {
+		"phpunit/phpunit" : "^7"
+	},
+	"autoload" : {
+		"psr-4" : {
+			"RHo\\Http\\" : "src/"
+		}
+	},
+	"autoload-dev" : {
+		"psr-4" : {
+			"RHo\\Http\\" : "tests/"
+		}
+	}
+}
