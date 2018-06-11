@@ -1,5 +1,6 @@
 {
 	"name" : "robert/http-request",
+	"license" : "MIT",
 	"require" : {
 		"robert/datetime" : "0.1"
 	},
