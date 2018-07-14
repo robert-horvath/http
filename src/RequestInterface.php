@@ -6,9 +6,11 @@ use stdClass;
 interface RequestInterface
 {
 
-    function server(string $key): ?string;
+    public function server(string $key): ?string;
 
-    function get(string $key): ?string;
+    public function get(string $key): ?string;
 
-    function body(): stdClass;
+    public function body(): stdClass;
+
+    public function isJsonContentType(): bool;
 }

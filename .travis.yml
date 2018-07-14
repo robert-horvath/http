@@ -1,7 +1,13 @@
 language: php
+
 php:
-  - '7.1'
-  - nightly
+  - '7.2'
+
 before_install:
+  - echo | pecl install channel://pecl.php.net/yaml-2.0.0
   - travis_retry composer install --no-dev --no-interaction --prefer-source
+  - travis_retry composer dump-autoload
   - cat vendor/composer/autoload_psr4.php
+
+after_success:
+  - bash <(curl -s https://codecov.io/bash)

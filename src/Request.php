@@ -27,18 +27,20 @@ class Request implements RequestInterface
 
     /**
      *
-     * @throws \InvalidArgumentException
+     * @throws \UnexpectedValueException
      */
     public function body(): stdClass
     {
-        error_clear_last();
-        return $this->decodeJson($this->getPhpInputFileContents());
+        if ($this->isJsonContentType())
+            return $this->jsonBody();
+        throw new \UnexpectedValueException($this->getContentTypeHeader());
     }
 
-    /**
-     *
-     * @throws \InvalidArgumentException
-     */
+    public function isJsonContentType(): bool
+    {
+        return $this->getContentTypeHeader() === 'application/json';
+    }
+
     private function getPhpInputFileContents(): string
     {
         $str = @file_get_contents($this->filename);
@@ -68,5 +70,16 @@ class Request implements RequestInterface
         $arr = error_get_last();
         $msg = sprintf("%s in %s on line %d", $arr['message'], $arr['file'], $arr['line']);
         throw new InvalidArgumentException($msg, $arr['type']);
+    }
+
+    private function jsonBody(): stdClass
+    {
+        error_clear_last();
+        return $this->decodeJson($this->getPhpInputFileContents());
+    }
+
+    private function getContentTypeHeader(): ?string
+    {
+        return strtolower($this->server('CONTENT_TYPE'));
     }
 }

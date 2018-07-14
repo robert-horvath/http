@@ -1,20 +1,20 @@
 {
-	"name" : "robert/http-request",
-	"license" : "MIT",
-	"require" : {
-		"php" : ">=7.1"
+	"name": "robert/http-request",
+	"license": "MIT",
+	"require": {
+		"php": ">=7.1"
 	},
-	"require-dev" : {
-		"phpunit/phpunit" : "^7"
+	"require-dev": {
+		"phpunit/phpunit": "^7"
 	},
-	"autoload" : {
-		"psr-4" : {
+	"autoload": {
+		"psr-4": {
 			"RHo\\Http\\" : "src/"
 		}
 	},
-	"autoload-dev" : {
-		"psr-4" : {
-			"RHo\\Http\\" : "tests/"
+	"autoload-dev": {
+		"psr-4": {
+			"RHoTest\\Http\\" : "tests/"
 		}
 	}
 }

@@ -1,7 +1,8 @@
 <?php
 declare(strict_types = 1);
-namespace RHo\Http;
+namespace RHoTest\Http;
 
+use RHo\Http\Request;
 use PHPUnit\Framework\TestCase;
 
 final class RequestTest extends TestCase
@@ -21,12 +22,29 @@ final class RequestTest extends TestCase
         $this->assertNull($req->server("foo"));
     }
 
+    public function testContentType(): void
+    {
+        $req = new Request();
+        $this->assertTrue($req->isJsonContentType());
+    }
+
+    /**
+     * @expectedException UnexpectedValueException
+     * @expectedExceptionMessage text/html
+     */
+    public function testHtmlContentType(): void
+    {
+        $_SERVER['CONTENT_TYPE'] = 'text/html';
+        $req = new Request();
+        $req->body();
+    }
+
     public function testBodySuccess(): void
     {
         $obj = new \stdClass();
         $obj->name = "Róbert";
         
-        $req = new Request(__DIR__ . '/body-ok.json');
+        $req = new Request(__DIR__ . '/data/body-ok.json');
         $this->assertEquals($obj, $req->body());
     }
 
@@ -36,7 +54,7 @@ final class RequestTest extends TestCase
      */
     public function testBodySyntaxError(): void
     {
-        $req = new Request(__DIR__ . '/syntax-error.txt');
+        $req = new Request(__DIR__ . '/data/syntax-error.txt');
         $req->body();
     }
 
