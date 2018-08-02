@@ -2,7 +2,7 @@
 declare(strict_types = 1);
 namespace RHo\Http;
 
-use stdClass, InvalidArgumentException, DomainException;
+use stdClass, InvalidArgumentException, DomainException, UnexpectedValueException;
 
 class Request implements RequestInterface
 {
@@ -33,7 +33,7 @@ class Request implements RequestInterface
     {
         if ($this->isJsonContentType())
             return $this->jsonBody();
-        throw new \UnexpectedValueException($this->getContentTypeHeader());
+        throw new UnexpectedValueException($this->getContentTypeHeader());
     }
 
     public function isJsonContentType(): bool

@@ -21,5 +21,7 @@ try {
     // JSON body error
 } catch (\UnexpectedValueException $e) {
     // Not JSON content type
+} catch (\InvalidArgumentException $e) {
+    // Cannot read entire file into a string
 }
 ```
