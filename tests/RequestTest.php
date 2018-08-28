@@ -1,6 +1,6 @@
 <?php
 declare(strict_types = 1);
-namespace RHoTest\Http;
+namespace RHo\HttpTest;
 
 use RHo\Http\Request;
 use PHPUnit\Framework\TestCase;
@@ -8,63 +8,39 @@ use PHPUnit\Framework\TestCase;
 final class RequestTest extends TestCase
 {
 
-    public function testGet(): void
+    private $req;
+
+    protected function setUp()
     {
-        $req = new Request();
-        $this->assertEquals("bar", $req->get("foo"));
-        $this->assertNull($req->get("bar"));
+        $this->req = new Request();
     }
 
-    public function testServer(): void
+    public function testQueryString(): void
     {
-        $req = new Request();
-        $this->assertEquals("foo", $req->server("bar"));
-        $this->assertNull($req->server("foo"));
+        $this->assertSame("bar", $this->req->queryStr("foo"));
+        $this->assertNull($this->req->queryStr("bar"));
     }
 
-    public function testContentType(): void
+    public function testHeader(): void
     {
-        $req = new Request();
-        $this->assertTrue($req->isJsonContentType());
-    }
-
-    /**
-     * @expectedException UnexpectedValueException
-     * @expectedExceptionMessage text/html
-     */
-    public function testHtmlContentType(): void
-    {
-        $_SERVER['CONTENT_TYPE'] = 'text/html';
-        $req = new Request();
-        $req->body();
+        $this->assertSame("foo", $this->req->header('Access'));
+        $this->assertNull($this->req->header('Authorization'));
     }
 
     public function testBodySuccess(): void
     {
-        $obj = new \stdClass();
-        $obj->name = "Róbert";
-        
-        $req = new Request(__DIR__ . '/data/body-ok.json');
-        $this->assertEquals($obj, $req->body());
+        $filename = __DIR__ . '/data/body-ok.json';
+        $body = file_get_contents($filename);
+        $this->assertSame($body, $this->req->body($filename));
     }
 
     /**
-     * @expectedException DomainException
-     * @expectedExceptionMessage Syntax error
-     */
-    public function testBodySyntaxError(): void
-    {
-        $req = new Request(__DIR__ . '/data/syntax-error.txt');
-        $req->body();
-    }
-
-    /**
+     *
      * @expectedException InvalidArgumentException
      * @expectedExceptionMessage file_get_contents(unknown.json): failed to open stream: No such file or directory
      */
     public function testBodyInputReadError(): void
     {
-        $req = new Request('unknown.json');
-        $req->body();
+        $this->req->body('unknown.json');
     }
 }

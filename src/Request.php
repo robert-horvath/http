@@ -2,63 +2,45 @@
 declare(strict_types = 1);
 namespace RHo\Http;
 
-use stdClass, InvalidArgumentException, DomainException, UnexpectedValueException;
+use InvalidArgumentException;
 
 class Request implements RequestInterface
 {
 
-    /** @var string */
-    private $filename;
-
-    public function __construct(string $filename = 'php://input')
+    public function header(string $key): ?string
     {
-        $this->filename = $filename;
+        return call_user_func([
+            $this,
+            "get${key}Header"
+        ]);
     }
 
-    public function server(string $key): ?string
-    {
-        return $_SERVER[$key] ?? null;
-    }
-
-    public function get(string $key): ?string
+    public function queryStr(string $key): ?string
     {
         return $_GET[$key] ?? null;
     }
 
-    /**
-     *
-     * @throws \UnexpectedValueException
-     */
-    public function body(): stdClass
+    public function body(string $filename = 'php://input'): ?string
     {
-        if ($this->isJsonContentType())
-            return $this->jsonBody();
-        throw new UnexpectedValueException($this->getContentTypeHeader());
-    }
-
-    public function isJsonContentType(): bool
-    {
-        return $this->getContentTypeHeader() === 'application/json';
-    }
-
-    private function getPhpInputFileContents(): string
-    {
-        $str = @file_get_contents($this->filename);
+        $str = @file_get_contents($filename);
         if ($str === false)
             $this->throwInvalidArgumentException();
         return $str;
     }
 
-    /**
-     *
-     * @throws \DomainException
-     */
-    private function decodeJson(string $str): stdClass
+    private function getAccessHeader(): ?string
     {
-        $json = json_decode($str);
-        if (json_last_error() === JSON_ERROR_NONE)
-            return $json;
-        throw new DomainException(json_last_error_msg(), json_last_error());
+        return $this->getHeader('HTTP_ACCESS');
+    }
+
+    private function getAuthorizationHeader(): ?string
+    {
+        return $this->getHeader('HTTP_AUTHORIZATION');
+    }
+
+    private function getHeader(string $key): ?string
+    {
+        return $_SERVER[$key] ?? null;
     }
 
     /**
@@ -70,16 +52,5 @@ class Request implements RequestInterface
         $arr = error_get_last();
         $msg = sprintf("%s in %s on line %d", $arr['message'], $arr['file'], $arr['line']);
         throw new InvalidArgumentException($msg, $arr['type']);
-    }
-
-    private function jsonBody(): stdClass
-    {
-        error_clear_last();
-        return $this->decodeJson($this->getPhpInputFileContents());
-    }
-
-    private function getContentTypeHeader(): ?string
-    {
-        return strtolower($this->server('CONTENT_TYPE'));
     }
 }

@@ -1,16 +1,12 @@
 <?php
 namespace RHo\Http;
 
-use stdClass;
-
 interface RequestInterface
 {
 
-    public function server(string $key): ?string;
+    public function header(string $header): ?string;
 
-    public function get(string $key): ?string;
+    public function queryStr(string $key): ?string;
 
-    public function body(): stdClass;
-
-    public function isJsonContentType(): bool;
+    public function body(string $filename = 'php://input'): ?string;
 }
