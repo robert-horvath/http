@@ -1,5 +1,5 @@
 {
-	"name" : "robert/http-request",
+	"name" : "robert/http",
 	"license" : "MIT",
 	"require" : {
 		"php" : ">=7.1"
