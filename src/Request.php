@@ -28,9 +28,9 @@ class Request implements RequestInterface
         return $str;
     }
 
-    private function getAccessHeader(): ?string
+    private function getAcceptHeader(): ?string
     {
-        return $this->getHeader('HTTP_ACCESS');
+        return $this->getHeader('HTTP_ACCEPT');
     }
 
     private function getAuthorizationHeader(): ?string

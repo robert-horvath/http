@@ -23,7 +23,7 @@ final class RequestTest extends TestCase
 
     public function testHeader(): void
     {
-        $this->assertSame("foo", $this->req->header('Access'));
+        $this->assertSame("foo", $this->req->header('Accept'));
         $this->assertNull($this->req->header('Authorization'));
     }
 

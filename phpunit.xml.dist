@@ -47,6 +47,6 @@
 	
 	<php>
 		<get name="foo" value="bar" />
-		<server name="HTTP_ACCESS" value="foo" />
+		<server name="HTTP_ACCEPT" value="foo" />
 	</php>	
 </phpunit>
