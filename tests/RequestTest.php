@@ -43,4 +43,14 @@ final class RequestTest extends TestCase
     {
         $this->req->body('unknown.json');
     }
+
+    /**
+     *
+     * @expectedException TypeError
+     * @expectedExceptionMessage call_user_func() expects parameter 1 to be a valid callback, class 'RHo\Http\Request' does not have a method 'getqwertzuiopHeader'
+     */
+    public function testNotImplementedHeader(): void
+    {
+        $this->req->header('qwertzuiop');
+    }
 }

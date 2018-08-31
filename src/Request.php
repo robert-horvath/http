@@ -7,6 +7,10 @@ use InvalidArgumentException;
 class Request implements RequestInterface
 {
 
+    /**
+     *
+     * @throws \TypeError If user func not implemented
+     */
     public function header(string $key): ?string
     {
         return call_user_func([
