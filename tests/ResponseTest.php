@@ -5,6 +5,10 @@ namespace RHo\HttpTest;
 use RHo\Http\Response as HttpResponse;
 use PHPUnit\Framework\TestCase;
 
+/**
+ *
+ * @runTestsInSeparateProcesses
+ */
 final class ResponseTest extends TestCase
 {
 

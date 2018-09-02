@@ -4,11 +4,21 @@ namespace RHo\Http;
 interface MediaTypeInterface
 {
 
-    public function type(): string;
+    static function initWithStr(string $mediaType): ?MediaTypeInterface;
 
-    public function subType(): string;
+    static function initWithCollection(string $mediaTypeCollection): array;
 
-    public function suffix(): ?string;
+    function str(): string;
 
-    public function parameter(string $key): ?string;
+    function type(): string;
+
+    function setTypes(string $mainType, string $subType): MediaTypeInterface;
+
+    function subType(): string;
+
+    function structuredSyntaxSuffix(): ?string;
+
+    function parameter(string $key): ?string;
+
+    function setParameter(string $key, string $value): MediaTypeInterface;
 }
