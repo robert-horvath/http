@@ -36,7 +36,7 @@ final class RequestTest extends TestCase
 
     /**
      *
-     * @expectedException InvalidArgumentException
+     * @expectedException RuntimeException
      * @expectedExceptionMessage file_get_contents(unknown.json): failed to open stream: No such file or directory
      */
     public function testBodyInputReadError(): void
@@ -46,8 +46,8 @@ final class RequestTest extends TestCase
 
     /**
      *
-     * @expectedException TypeError
-     * @expectedExceptionMessage call_user_func() expects parameter 1 to be a valid callback, class 'RHo\Http\Request' does not have a method 'getqwertzuiopHeader'
+     * @expectedException BadMethodCallException
+     * @expectedExceptionMessage Method [getqwertzuiopHeader] does not exist
      */
     public function testNotImplementedHeader(): void
     {

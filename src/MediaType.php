@@ -5,25 +5,24 @@ namespace RHo\Http;
 class MediaType implements MediaTypeInterface
 {
 
-    /** @var array|NULL */
-    private $matches;
+    /** @var string */
+    private $type;
 
-    /** @var array|NULL */
+    /** @var string */
+    private $subType;
+
+    /** @var string */
+    private $suffix;
+
+    /** @var array */
     private $parameters;
 
-    private function __construct(string $mediaType)
+    public function __construct(string $type, string $subType, string $suffix, array $parameters = [])
     {
-        if (preg_match('/^([^\/]+)\/([^+]+)\+([^;]+);([^,]+)$/', $mediaType, $this->matches) === 1)
-            parse_str(str_replace(';', '&', array_pop($this->matches)), $this->parameters);
-        else 
-            $this->matches = NULL;
-    }
-
-    private function valid(): bool
-    {
-        if ($this->matches === NULL)
-            return FALSE;
-        return TRUE;
+        $this->type = $type;
+        $this->subType = $subType;
+        $this->suffix = $suffix;
+        $this->parameters = $parameters;
     }
 
     public function parameter(string $key): ?string
@@ -33,24 +32,37 @@ class MediaType implements MediaTypeInterface
 
     public function subType(): string
     {
-        return $this->matches[2];
+        return $this->subType;
     }
 
     public function type(): string
     {
-        return $this->matches[1];
+        return $this->type;
     }
 
     public function suffix(): ?string
     {
-        return $this->matches[3];
+        return $this->suffix;
     }
 
-    public static function init(string $mediaType): ?MediaType
+    public static function init(string $mediaType, ?int &$error): ?MediaTypeInterface
     {
-        $mt = new self($mediaType);
-        if ($mt->valid())
-            return $mt;
+        $matches = NULL;
+        $error = self::pregMatch($mediaType, $matches);
+        if ($error !== NULL || $matches === NULL)
+            return NULL;
+        parse_str(str_replace(';', '&', array_pop($matches)), $matches[0]);
+        return new self($matches[1], $matches[2], $matches[3], $matches[0]);
+    }
+
+    private static function pregMatch(string $mediaType, ?array &$matches): ?int
+    {
+        $result = preg_match('/^(?:([^\/]+)\/([^+]+)\+([^;]+);([^,]+)){1,128}$/', $mediaType, $matches);
+        $error = preg_last_error();
+        if ($result === FALSE || $error !== PREG_NO_ERROR)
+            return $error;
+        if ($result === 0)
+            $matches = NULL;
         return NULL;
     }
 }
