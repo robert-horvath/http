@@ -38,11 +38,10 @@ try {
 
 ### Example usage of HTTP MediaType class
 ```php
-$mt = new RHo\Http\MediaType();
-$mt->setTypes('application', 'vnd.api+json');
+$mt = new RHo\Http\MediaType('application', 'vnd.api+json');
 $mt->setParameter('version', '1');
 
-$mt->str();                    // string(34) "application/vnd.api+json;version=1"
+var_dump($mt);                 // string(34) "application/vnd.api+json;version=1"
 $mt->type();                   // string(11) "application"
 $mt->subType();                // string(12) "vnd.api+json"
 $mt->structuredSyntaxSuffix(); // string(4)  "json"
@@ -54,16 +53,13 @@ $mt->parameter('q');           // NULL
 ```php
 try {
   $mt = RHo\Http\MediaType::initWithStr('*/*;version=2');
+
+  $arr = new RHo\Http\MediaType::initWithCSV('image/jpg,plain/text');
+  foreach ($arr as $mt) {
+    // $mt is a RHo\Http\MediaType|NULL
+  }
 } catch (RuntimeException $e) {
   // Regular expression error
-}
-```
-
-### Example usage of HTTP MediaType class with collection
-```php
-$arr = new RHo\Http\MediaType::initWithCSV('image/jpg,plain/text');
-foreach ($arr as $mt) {
-  // $mt is a RHo\Http\MediaType|NULL
 }
 ```
 
