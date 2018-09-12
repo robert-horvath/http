@@ -6,13 +6,13 @@ interface MediaTypeInterface
 
     static function initWithStr(string $mediaType): ?MediaTypeInterface;
 
-    static function initWithCollection(string $mediaTypeCollection): array;
+    static function initWithCSV(string $mediaTypeCollection): array;
 
-    function str(): string;
+    function __construct(string $mainType, string $subType);
+
+    function __toString(): string;
 
     function type(): string;
-
-    function setTypes(string $mainType, string $subType): MediaTypeInterface;
 
     function subType(): string;
 

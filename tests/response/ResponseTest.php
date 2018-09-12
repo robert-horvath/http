@@ -29,13 +29,14 @@ final class ResponseTest extends TestCase
 
     public function testUnauthorized(): void
     {
-        $res = new HttpResponse\Unauthorized();
+        $res = new HttpResponse\Unauthorized('Basic realm="Access to the staging site", charset="UTF-8');
         $res->setHeader('Content-Type', 'application/vnd.api+json;version=1');
         $res->send(FALSE);
 
         $this->assertSame(401, http_response_code());
         $headers = xdebug_get_headers();
         $this->assertArraySubset([
+            'WWW-Authenticate: Basic realm="Access to the staging site", charset="UTF-8',
             'Content-Type: application/vnd.api+json;version=1'
         ], $headers);
         $this->expectOutputString('');

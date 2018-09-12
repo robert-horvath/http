@@ -7,7 +7,7 @@ use RuntimeException;
 // https://tools.ietf.org/html/rfc6838#section-4.2
 // https://tools.ietf.org/html/rfc5234#appendix-B.1
 // https://tools.ietf.org/html/rfc822#section-3.3
-class MediaType implements MediaTypeInterface
+final class MediaType implements MediaTypeInterface
 {
 
     // CHAR = %x00-7F ; Any ASCII character
@@ -105,9 +105,10 @@ class MediaType implements MediaTypeInterface
     /** @var array */
     private $parameters = [];
 
-    public function parameter(string $key): ?string
+    public function __construct(string $mainType, string $subType)
     {
-        return $this->parameters[$key] ?? NULL;
+        $this->type = $mainType;
+        $this->subType = $subType;
     }
 
     public function setParameter(string $key, string $value): MediaTypeInterface
@@ -116,9 +117,11 @@ class MediaType implements MediaTypeInterface
         return $this;
     }
 
-    public function subType(): string
+    public function parameter(string $key): ?string
     {
-        return $this->subType;
+        if (isset($this->parameters[$key]))
+            return $this->parameters[$key];
+        return NULL;
     }
 
     public function type(): string
@@ -126,11 +129,9 @@ class MediaType implements MediaTypeInterface
         return $this->type;
     }
 
-    public function setTypes(string $mainType, string $subType): MediaTypeInterface
+    public function subType(): string
     {
-        $this->type = $mainType;
-        $this->subType = $subType;
-        return $this;
+        return $this->subType;
     }
 
     public function structuredSyntaxSuffix(): ?string
@@ -140,7 +141,7 @@ class MediaType implements MediaTypeInterface
         return $this->suffix;
     }
 
-    public function str(): string
+    public function __toString(): string
     {
         $str = $this->type . '/' . $this->subType;
         if (count($this->parameters) > 0)
@@ -161,18 +162,17 @@ class MediaType implements MediaTypeInterface
         return self::createNewMediaType($matches);
     }
 
-    public static function initWithCollection(string $mediaTypeCollection): array
+    public static function initWithCSV(string $mediaTypeCollection): array
     {
-        $arr = [];
+        $mtc = [];
         foreach (explode(',', $mediaTypeCollection) as $mediaType)
-            $arr[] = self::initWithStr($mediaType);
-        return $arr;
+            $mtc[] = self::initWithStr($mediaType);
+        return $mtc;
     }
 
     private static function createNewMediaType(array $data): self
     {
-        $mt = new self();
-        $mt->setTypes($data[1], $data[2]);
+        $mt = new self($data[1], $data[2]);
         return self::parseParameters($mt, $data[3] ?? NULL);
     }
 

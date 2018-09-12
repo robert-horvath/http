@@ -59,26 +59,29 @@ try {
 }
 ```
 
-### Example usage of HTTP MediaTypeCollection class
+### Example usage of HTTP MediaType class with collection
 ```php
-$mtc = new RHo\Http\MediaTypeCollection($req->header("Accept"));
-$mtc->errCode();             // NULL
-$mtc->errText();             // string(0) ""
-foreach ($mtc as $mt) {      // $mt is a RHo\Http\MediaType|NULL
-  $mt->str();                // string(16) "plain/text;q=0.1"
-  $mt->type();               // string(5) "plain"
-  $mt->subType();            // string(4) "text"
-  $mt->suffix();             // NULL
-  $mt->parameter('version'); // NULL
-  $mt->parameter('q');       // string(3) "0.1"
+$arr = new RHo\Http\MediaType::initWithCSV('image/jpg,plain/text');
+foreach ($arr as $mt) {
+  // $mt is a RHo\Http\MediaType|NULL
 }
 ```
 
 ### Example usage of HTTP Message class
 ```php
 $msg = new RHo\Http\Message(new RHo\Http\Request());
-$json = $msg->data();            // class stdClass#1 (1) { public $a => bool(true) }
-$mtf = $msg->mediaTypeFactory(); // RHo\Http\MediaTypeFactory
+$msg->setSupportedContentTypes([
+  new HttpMediaType('plain/text'), 
+  new HttpMediaType('image/png')
+]);
+
+$msg->hasContentType();        // bool(true)
+$msg->isContentTypeSupported() // bool(true)
+$msg->contentType();           // RHo\Http\MediaType|NULL
+$msg->hasContent();            // bool(true)
+$msg->contentSize();           // int(10)
+$json = $msg->content();       // RHo\Http\Body\Json
+$json->decode();               // class stdClass#1 (1) { public $a => bool(true) }
 ```
 
 ### Example usage of HTTP Unauthorized Response class
@@ -87,27 +90,4 @@ namespace RHo\Http\Response;
 
 $res = new Unauthorized('Basic realm="User Visible Realm"');
 $res->setBody('Example answer');
-```
-
-### Example usage of HTTP JSON Body
-```php
-namespace RHo\Http\Body\Json as JsonHttpBody;
-
-$json = new JsonHttpBody();
-
-// client -> server
-$err = $json->decode('false'); 
-if ($err === NULL) {
-  echo $json->value(); // bool(false)
-  echo $json->str();   // string(5) "false"
-} else
-  echo $err . ': ' . $json->errStr();
-
-// server -> client
-$err = $json->encode(true);
-if ($err === NULL) {
-  echo $json->value(); // bool(true)
-  echo $json->str();   // string(4) "true"
-} else
-  echo $err . ': ' . $json->errStr();
 ```

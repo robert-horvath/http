@@ -1,6 +1,8 @@
 <?php
 declare(strict_types = 1);
-namespace RHo\Http;
+namespace RHo\Http\Response;
+
+use RHo\Http\ResponseInterface;
 
 abstract class AbstractResponse implements ResponseInterface
 {

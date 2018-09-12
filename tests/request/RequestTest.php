@@ -2,11 +2,15 @@
 declare(strict_types = 1);
 namespace RHo\HttpTest;
 
+require_once __DIR__ . '/../mock_functions.php';
+
 use RHo\Http\Request;
 use PHPUnit\Framework\TestCase;
 
 final class RequestTest extends TestCase
 {
+
+    private const PHP_INPUT_FILE = __DIR__ . '/../body-ok.json';
 
     private $req;
 
@@ -23,15 +27,20 @@ final class RequestTest extends TestCase
 
     public function testHeader(): void
     {
+        $_SERVER['CONTENT_TYPE'] = 'x';
+        $_SERVER['CONTENT_LENGTH'] = '1';
+
         $this->assertSame("foo", $this->req->header('Accept'));
         $this->assertNull($this->req->header('Authorization'));
+        $this->assertSame('x', $this->req->header('Content-Type'));
+        $this->assertSame('1', $this->req->header('Content-Length'));
     }
 
     public function testBodySuccess(): void
     {
-        $filename = __DIR__ . '/data/body-ok.json';
-        $body = file_get_contents($filename);
-        $this->assertSame($body, $this->req->body($filename));
+        $GLOBALS['file_get_contents'] = self::PHP_INPUT_FILE;
+        $body = file_get_contents(self::PHP_INPUT_FILE);
+        $this->assertSame($body, $this->req->body());
     }
 
     /**
@@ -41,13 +50,14 @@ final class RequestTest extends TestCase
      */
     public function testBodyInputReadError(): void
     {
-        $this->req->body('unknown.json');
+        $GLOBALS['file_get_contents'] = 'unknown.json';
+        $this->req->body();
     }
 
     /**
      *
      * @expectedException BadMethodCallException
-     * @expectedExceptionMessage Method [getqwertzuiopHeader] does not exist
+     * @expectedExceptionMessage Function RHo\Http\Request::getqwertzuiopHeader() does not exist
      */
     public function testNotImplementedHeader(): void
     {
