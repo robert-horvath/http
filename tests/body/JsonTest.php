@@ -3,7 +3,7 @@ declare(strict_types = 1);
 namespace RHo\HttpTest;
 
 use PHPUnit\Framework\TestCase;
-use RHo\Http\Content\Json as HttpJsonBody;
+use RHo\Http\Body\Json as HttpJsonBody;
 
 final class JsonTest extends TestCase
 {

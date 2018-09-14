@@ -14,7 +14,7 @@
 				"src/media-type/",
 				"src/request/"
 			],
-			"RHo\\Http\\Content\\" : "src/content-filter/",
+			"RHo\\Http\\Body\\" : "src/body/",
 			"RHo\\Http\\Header\\" : "src/header/",
 			"RHo\\Http\\Response\\" : "src/response/"
 		}
@@ -26,7 +26,7 @@
 				"tests/media-type/",
 				"tests/request/",
 				"tests/response/",
-				"tests/content-filter/",
+				"tests/body/",
 				"tests/header/"
 			]
 		}

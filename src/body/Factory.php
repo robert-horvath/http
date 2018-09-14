@@ -1,16 +1,16 @@
 <?php
 declare(strict_types = 1);
-namespace RHo\Http\Content;
+namespace RHo\Http\Body;
 
 use RHo\Http\ {
     MediaTypeInterface as HttpMediaTypeIface,
-    ContentFilterInterface as HttpContentFilterIface
+    BodyInterface as HttpBodyIface
 };
 
 class Factory
 {
 
-    public static function build(HttpMediaTypeIface $mediaType): HttpContentFilterIface
+    public static function build(HttpMediaTypeIface $mediaType): HttpBodyIface
     {
         switch ($mediaType->structuredSyntaxSuffix()) {
             case 'xml':

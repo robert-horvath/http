@@ -1,10 +1,10 @@
 <?php
 declare(strict_types = 1);
-namespace RHo\Http\Content;
+namespace RHo\Http\Body;
 
-use RHo\Http\ContentFilterInterface;
+use RHo\Http\BodyInterface;
 
-class PlainText implements ContentFilterInterface
+class PlainText implements BodyInterface
 {
 
     /** @var mixed */

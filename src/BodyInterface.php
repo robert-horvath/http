@@ -1,7 +1,7 @@
 <?php
 namespace RHo\Http;
 
-interface ContentFilterInterface
+interface BodyInterface
 {
 
     function decode(string $value);

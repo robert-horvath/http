@@ -3,7 +3,7 @@ declare(strict_types = 1);
 namespace RHo\HttpTest;
 
 use PHPUnit\Framework\TestCase;
-use RHo\Http\Content\PlainText as HttpPlainTextBody;
+use RHo\Http\Body\PlainText as HttpPlainTextBody;
 
 final class PlainTextTest extends TestCase
 {

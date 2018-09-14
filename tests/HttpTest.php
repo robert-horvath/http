@@ -6,7 +6,7 @@ require_once __DIR__ . '/mock_functions.php';
 
 use RHo\Http\ {
     Request,
-    Content\Factory as ContentFactory,
+    Body\Factory as BodyFactory,
     Header\ContentType as ContentTypeHeader
 };
 use PHPUnit\Framework\TestCase;
@@ -31,7 +31,7 @@ final class HttpTest extends TestCase
         $GLOBALS['file_get_contents'] = self::PHP_INPUT_JSON_FILE;
 
         $mt = new ContentTypeHeader($this->req);
-        $c = ContentFactory::build($mt->value());
+        $c = BodyFactory::build($mt->value());
 
         $this->assertSame('{"name": "Róbert"}', $c->decode($this->req->body()));
         $this->assertNull($c->errCode());
@@ -45,7 +45,7 @@ final class HttpTest extends TestCase
         $GLOBALS['file_get_contents'] = self::PHP_INPUT_JSON_FILE;
 
         $mt = new ContentTypeHeader($this->req);
-        $c = ContentFactory::build($mt->value());
+        $c = BodyFactory::build($mt->value());
 
         $this->assertEquals((object) [
             "name" => "Róbert"
@@ -61,7 +61,7 @@ final class HttpTest extends TestCase
         $GLOBALS['file_get_contents'] = self::PHP_INPUT_XML_FILE;
 
         $mt = new ContentTypeHeader($this->req);
-        $c = ContentFactory::build($mt->value());
+        $c = BodyFactory::build($mt->value());
 
         $this->assertSame('Róbert', (string) $c->decode($this->req->body()));
         $this->assertNull($c->errCode());
@@ -74,7 +74,7 @@ final class HttpTest extends TestCase
         $_SERVER['CONTENT_LENGTH'] = '0';
 
         $mt = new ContentTypeHeader($this->req);
-        $c = ContentFactory::build($mt->value());
+        $c = BodyFactory::build($mt->value());
 
         $this->assertSame('', (string) $c->decode($this->req->body()));
         $this->assertNull($c->errCode());

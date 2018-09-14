@@ -3,7 +3,7 @@ declare(strict_types = 1);
 namespace RHo\HttpTest;
 
 use PHPUnit\Framework\TestCase;
-use RHo\Http\Content\Xml as HttpXmlBody;
+use RHo\Http\Body\Xml as HttpXmlBody;
 
 final class XmlTest extends TestCase
 {
