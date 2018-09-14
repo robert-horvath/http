@@ -2,36 +2,30 @@
 declare(strict_types = 1);
 namespace RHo\Http\Body;
 
-use SimpleXMLElement;
+use RHo\Http\BodyInterface;
 
-class Xml extends PlainText
+class Xml extends Text
 {
 
-    public function decode(string $value): ?SimpleXMLElement
+    public static function decode(string $value): BodyInterface
     {
-        $this->clearErrorFields();
-        $xml = simplexml_load_string($value, 'SimpleXMLElement', LIBXML_NOCDATA);
-        $this->updateErrorFields();
-        return $this->value($xml);
+        self::clearErrorFields();
+        return new static(simplexml_load_string($value, 'SimpleXMLElement', LIBXML_NOCDATA));
     }
 
-    public function encode($value): ?string
+    public static function encode($value): BodyInterface
     {
-        $this->clearErrorFields();
-        $str = trim($value->asXml());
-        $this->updateErrorFields();
-        return $this->value($str);
+        self::clearErrorFields();
+        return new static(trim($value->asXml()));
     }
 
-    private function clearErrorFields(): void
+    private static function clearErrorFields(): void
     {
         libxml_use_internal_errors(TRUE);
         libxml_clear_errors();
-        $this->errCode = NULL;
-        $this->errText = NULL;
     }
 
-    private function updateErrorFields(): void
+    protected function initErrorFields(): void
     {
         $errCode = XML_ERROR_NONE;
         $errText = [];

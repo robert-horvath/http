@@ -3,23 +3,18 @@ declare(strict_types = 1);
 namespace RHo\Http\Body;
 
 use RHo\Http\ {
-    MediaTypeInterface as HttpMediaTypeIface,
-    BodyInterface as HttpBodyIface
+    MediaTypeInterface,
+    BodyInterface
 };
 
 class Factory
 {
 
-    public static function build(HttpMediaTypeIface $mediaType): HttpBodyIface
+    public static function decode(MediaTypeInterface $mediaType, string $value): BodyInterface
     {
-        switch ($mediaType->structuredSyntaxSuffix()) {
-            case 'xml':
-                return new Xml();
-            case 'json':
-                return new Json();
-            case 'text':
-            default:
-                return new PlainText();
-        }
+        $class = __NAMESPACE__ . '\\' . $mediaType->structuredSyntaxSuffix();
+        if (class_exists($class))
+            return $class::decode($value);
+        return Text::decode($value);
     }
 }

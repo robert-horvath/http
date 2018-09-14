@@ -4,9 +4,11 @@ namespace RHo\Http;
 interface BodyInterface
 {
 
-    function decode(string $value);
+    static function decode(string $value): BodyInterface;
 
-    function encode($value): ?string;
+    static function encode($value): BodyInterface;
+
+    function value();
 
     function errText(): ?string;
 

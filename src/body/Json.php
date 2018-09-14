@@ -2,24 +2,22 @@
 declare(strict_types = 1);
 namespace RHo\Http\Body;
 
-class Json extends PlainText
+use RHo\Http\BodyInterface;
+
+class Json extends Text
 {
 
-    public function decode(string $value)
+    public static function decode(string $value): BodyInterface
     {
-        $json = json_decode($value);
-        $this->updateErrorFields();
-        return $this->value($json);
+        return new static(json_decode($value));
     }
 
-    public function encode($value): ?string
+    public static function encode($value): BodyInterface
     {
-        $str = json_encode($value);
-        $this->updateErrorFields();
-        return $this->value($str);
+        return new static(json_encode($value));
     }
 
-    private function updateErrorFields(): void
+    protected function initErrorFields(): void
     {
         $this->errCode = $this->jsonLastError();
         $this->errText = $this->errCode === NULL ? NULL : $this->jsonLastErrorMsg();

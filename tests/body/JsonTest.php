@@ -8,39 +8,35 @@ use RHo\Http\Body\Json as HttpJsonBody;
 final class JsonTest extends TestCase
 {
 
-    /** @var HttpJsonBody */
-    private $obj;
-
-    protected function setUp()
-    {
-        $this->obj = new HttpJsonBody();
-    }
-
     public function testValidJsonHttpBodyFromClient(): void
     {
-        $this->assertSame(FALSE, $this->obj->decode('false'));
-        $this->assertNull($this->obj->errText());
-        $this->assertNull($this->obj->errCode());
+        $body = HttpJsonBody::decode('false');
+        $this->assertSame(FALSE, $body->value());
+        $this->assertNull($body->errText());
+        $this->assertNull($body->errCode());
     }
 
     public function testInvalidJsonHttpBodyFromClient(): void
     {
-        $this->assertNull($this->obj->decode(''));
-        $this->assertSame('Syntax error', $this->obj->errText());
-        $this->assertSame(JSON_ERROR_SYNTAX, $this->obj->errCode());
+        $body = HttpJsonBody::decode('');
+        $this->assertNull($body->value());
+        $this->assertSame('Syntax error', $body->errText());
+        $this->assertSame(JSON_ERROR_SYNTAX, $body->errCode());
     }
 
     public function testValidJsonHttpBodyToClient(): void
     {
-        $this->assertSame('100', $this->obj->encode(100));
-        $this->assertNull($this->obj->errText());
-        $this->assertNull($this->obj->errCode());
+        $body = HttpJsonBody::encode(100);
+        $this->assertSame('100', $body->value());
+        $this->assertNull($body->errText());
+        $this->assertNull($body->errCode());
     }
 
     public function testInvalidJsonHttpBodyToClient(): void
     {
-        $this->assertNull($this->obj->encode("\xB1\x31"));
-        $this->assertSame('Malformed UTF-8 characters, possibly incorrectly encoded', $this->obj->errText());
-        $this->assertSame(JSON_ERROR_UTF8, $this->obj->errCode());
+        $body = HttpJsonBody::encode("\xB1\x31");
+        $this->assertNull($body->value());
+        $this->assertSame('Malformed UTF-8 characters, possibly incorrectly encoded', $body->errText());
+        $this->assertSame(JSON_ERROR_UTF8, $body->errCode());
     }
 }

@@ -3,30 +3,24 @@ declare(strict_types = 1);
 namespace RHo\HttpTest;
 
 use PHPUnit\Framework\TestCase;
-use RHo\Http\Body\PlainText as HttpPlainTextBody;
+use RHo\Http\Body\Text as HttpTextBody;
 
 final class PlainTextTest extends TestCase
 {
 
-    /** @var HttpPlainTextBody */
-    private $obj;
-
-    protected function setUp()
-    {
-        $this->obj = new HttpPlainTextBody();
-    }
-
     public function testValidPlainTextHttpBodyFromClient(): void
     {
-        $this->assertSame('abcd', $this->obj->decode('abcd'));
-        $this->assertNull($this->obj->errCode());
-        $this->assertNull($this->obj->errText());
+        $body = HttpTextBody::decode('abcd');
+        $this->assertSame('abcd', $body->value());
+        $this->assertNull($body->errCode());
+        $this->assertNull($body->errText());
     }
 
     public function testValidPlainTextHttpBodyToClient(): void
     {
-        $this->assertSame('Róbert', $this->obj->encode('Róbert'));
-        $this->assertNull($this->obj->errCode());
-        $this->assertNull($this->obj->errText());
+        $body = HttpTextBody::encode(1000);
+        $this->assertSame('1000', $body->value());
+        $this->assertNull($body->errCode());
+        $this->assertNull($body->errText());
     }
 }

@@ -10,32 +10,27 @@ final class XmlTest extends TestCase
 
     private const XML_ERROR_NAME_REQUIRED = 68;
 
-    /** @var HttpXmlBody */
-    private $obj;
-
-    protected function setUp()
-    {
-        $this->obj = new HttpXmlBody();
-    }
-
     public function testValidXmlHttpBodyFromClient(): void
     {
-        $this->assertSame('z', (string) $this->obj->decode('<x><y>z</y></x>')->y);
-        $this->assertNull($this->obj->errText());
-        $this->assertNull($this->obj->errCode());
+        $body = HttpXmlBody::decode('<x><y>z</y></x>');
+        $this->assertSame('z', (string) $body->value()->y);
+        $this->assertNull($body->errText());
+        $this->assertNull($body->errCode());
     }
 
     public function testInvalidXmlHttpBodyFromClient(): void
     {
-        $this->assertNull($this->obj->decode('<x<y>z</y></x>'));
-        $this->assertSame("error parsing attribute name\nattributes construct error\nCouldn't find end of Start Tag x line 1\nExtra content at the end of the document", $this->obj->errText());
-        $this->assertSame(self::XML_ERROR_NAME_REQUIRED, $this->obj->errCode());
+        $body = HttpXmlBody::decode('<x<y>z</y></x>');
+        $this->assertNull($body->value());
+        $this->assertSame("error parsing attribute name\nattributes construct error\nCouldn't find end of Start Tag x line 1\nExtra content at the end of the document", $body->errText());
+        $this->assertSame(self::XML_ERROR_NAME_REQUIRED, $body->errCode());
     }
 
     public function testValidXmlHttpBodyToClient(): void
     {
-        $this->assertSame("<?xml version=\"1.0\"?>\n<a>b</a>", $this->obj->encode(new \SimpleXMLElement('<a>b</a>')));
-        $this->assertNull($this->obj->errCode());
-        $this->assertNull($this->obj->errText());
+        $body = HttpXmlBody::encode(new \SimpleXMLElement('<a>b</a>'));
+        $this->assertSame("<?xml version=\"1.0\"?>\n<a>b</a>", $body->value());
+        $this->assertNull($body->errCode());
+        $this->assertNull($body->errText());
     }
 }

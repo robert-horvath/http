@@ -31,9 +31,9 @@ final class HttpTest extends TestCase
         $GLOBALS['file_get_contents'] = self::PHP_INPUT_JSON_FILE;
 
         $mt = new ContentTypeHeader($this->req);
-        $c = BodyFactory::build($mt->value());
+        $c = BodyFactory::decode($mt->value(), $this->req->body());
 
-        $this->assertSame('{"name": "Róbert"}', $c->decode($this->req->body()));
+        $this->assertSame('{"name": "Róbert"}', $c->value());
         $this->assertNull($c->errCode());
         $this->assertNull($c->errText());
     }
@@ -45,11 +45,11 @@ final class HttpTest extends TestCase
         $GLOBALS['file_get_contents'] = self::PHP_INPUT_JSON_FILE;
 
         $mt = new ContentTypeHeader($this->req);
-        $c = BodyFactory::build($mt->value());
+        $c = BodyFactory::decode($mt->value(), $this->req->body());
 
         $this->assertEquals((object) [
             "name" => "Róbert"
-        ], $c->decode($this->req->body()));
+        ], $c->value());
         $this->assertNull($c->errCode());
         $this->assertNull($c->errText());
     }
@@ -61,9 +61,9 @@ final class HttpTest extends TestCase
         $GLOBALS['file_get_contents'] = self::PHP_INPUT_XML_FILE;
 
         $mt = new ContentTypeHeader($this->req);
-        $c = BodyFactory::build($mt->value());
+        $c = BodyFactory::decode($mt->value(), $this->req->body());
 
-        $this->assertSame('Róbert', (string) $c->decode($this->req->body()));
+        $this->assertSame('Róbert', (string) $c->value());
         $this->assertNull($c->errCode());
         $this->assertNull($c->errText());
     }
@@ -74,9 +74,9 @@ final class HttpTest extends TestCase
         $_SERVER['CONTENT_LENGTH'] = '0';
 
         $mt = new ContentTypeHeader($this->req);
-        $c = BodyFactory::build($mt->value());
+        $c = BodyFactory::decode($mt->value(), $this->req->body());
 
-        $this->assertSame('', (string) $c->decode($this->req->body()));
+        $this->assertSame('', (string) $c->value());
         $this->assertNull($c->errCode());
         $this->assertNull($c->errText());
     }
