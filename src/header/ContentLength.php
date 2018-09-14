@@ -13,9 +13,6 @@ use RHo\Http\ {
 class ContentLength implements HeaderInterface
 {
 
-    /** @var HttpRequest */
-    private $httpRequest;
-
     /** @var string|NULL */
     private $contentLength;
 

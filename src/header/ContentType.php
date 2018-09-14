@@ -15,9 +15,6 @@ use RHo\Http\ {
 class ContentType implements HeaderInterface
 {
 
-    /** @var HttpRequest */
-    private $httpRequest;
-
     /** @var string|NULL */
     private $contentType;
 
@@ -26,8 +23,7 @@ class ContentType implements HeaderInterface
 
     public function __construct(HttpRequest $httpRequest)
     {
-        $this->httpRequest = $httpRequest;
-        $this->contentType = $this->httpRequest->header('Content-Type');
+        $this->contentType = $httpRequest->header('Content-Type');
         $this->mediaType = $this->getHttpMediaType();
     }
 
