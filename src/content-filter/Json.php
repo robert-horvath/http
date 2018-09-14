@@ -5,18 +5,18 @@ namespace RHo\Http\Content;
 class Json extends PlainText
 {
 
-    public function decode()
+    public function decode(string $value)
     {
-        $value = json_decode($this->value);
+        $json = json_decode($value);
         $this->updateErrorFields();
-        return $this->value($value);
+        return $this->value($json);
     }
 
-    public function encode(): ?string
+    public function encode($value): ?string
     {
-        $value = json_encode($this->value);
+        $str = json_encode($value);
         $this->updateErrorFields();
-        return $this->value($value);
+        return $this->value($str);
     }
 
     private function updateErrorFields(): void

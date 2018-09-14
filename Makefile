@@ -11,7 +11,7 @@ no-dev-env:
 
 clean:
 	@echo "\033[0;33m>>> Cleaning workspace\033[0m"
-	rm -rf vendor composer.lock phpunit.xml
+	rm -rf vendor tmp composer.lock phpunit.xml
 
 unit-test:
 	@echo "\033[0;33m>>> Running tests\033[0m"

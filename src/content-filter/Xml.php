@@ -7,20 +7,20 @@ use SimpleXMLElement;
 class Xml extends PlainText
 {
 
-    public function decode(): ?SimpleXMLElement
+    public function decode(string $value): ?SimpleXMLElement
     {
         $this->clearErrorFields();
-        $value = simplexml_load_string($this->value, 'SimpleXMLElement', LIBXML_NOCDATA);
+        $xml = simplexml_load_string($value, 'SimpleXMLElement', LIBXML_NOCDATA);
         $this->updateErrorFields();
-        return $this->value($value);
+        return $this->value($xml);
     }
 
-    public function encode(): ?string
+    public function encode($value): ?string
     {
         $this->clearErrorFields();
-        $value = trim($this->value->asXml());
+        $str = trim($value->asXml());
         $this->updateErrorFields();
-        return $this->value($value);
+        return $this->value($str);
     }
 
     private function clearErrorFields(): void

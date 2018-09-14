@@ -2,7 +2,9 @@
 declare(strict_types = 1);
 namespace RHo\Http\Content;
 
-class PlainText implements ContentInterface
+use RHo\Http\ContentFilterInterface;
+
+class PlainText implements ContentFilterInterface
 {
 
     /** @var mixed */
@@ -14,19 +16,14 @@ class PlainText implements ContentInterface
     /** @var ?string */
     protected $errText;
 
-    public function __construct($value)
+    public function decode(string $value)
     {
-        $this->value = $value;
+        return $this->value($value);
     }
 
-    public function decode()
+    public function encode($value): ?string
     {
-        return $this->value((string) $this->value);
-    }
-
-    public function encode(): ?string
-    {
-        return $this->value((string) $this->value);
+        return $this->value((string) $value);
     }
 
     public function errText(): ?string
