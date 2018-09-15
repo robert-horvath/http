@@ -26,6 +26,15 @@ final class ResponseTest extends TestCase
         $this->expectOutputString('test');
     }
 
+    public function testUnsupportedMediaType(): void
+    {
+        $res = new HttpResponse\UnsupportedMediaType();
+        $res->build()->send();
+
+        $this->assertSame(415, http_response_code());
+        $this->expectOutputString('');
+    }
+
     public function testUnauthorized(): void
     {
         $res = new HttpResponse\Unauthorized('Basic realm="Access to the staging site", charset="UTF-8');

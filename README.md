@@ -38,8 +38,9 @@ try {
 
 ### Example usage of HTTP MediaType class
 ```php
-$mt = new RHo\Http\MediaType('application', 'vnd.api+json');
-$mt->setParameter('version', '1');
+$mt = new RHo\Http\MediaType('application', 'vnd.api+json', [
+  'version' => '1'
+]);
 
 var_dump($mt);                 // string(34) "application/vnd.api+json;version=1"
 $mt->type();                   // string(11) "application"
@@ -63,27 +64,11 @@ try {
 }
 ```
 
-### Example usage of HTTP Message class
+### Example usage of HTTP Unauthorized Response builder class
 ```php
-$msg = new RHo\Http\Message(new RHo\Http\Request());
-$msg->setSupportedContentTypes([
-  new HttpMediaType('plain/text'), 
-  new HttpMediaType('image/png')
-]);
-
-$msg->hasContentType();        // bool(true)
-$msg->isContentTypeSupported() // bool(true)
-$msg->contentType();           // RHo\Http\MediaType|NULL
-$msg->hasContent();            // bool(true)
-$msg->contentSize();           // int(10)
-$json = $msg->content();       // RHo\Http\Body\Json
-$json->decode();               // class stdClass#1 (1) { public $a => bool(true) }
-```
-
-### Example usage of HTTP Unauthorized Response class
-```php
-namespace RHo\Http\Response;
-
-$res = new Unauthorized('Basic realm="User Visible Realm"');
-$res->setBody('Example answer');
+$res = new RHo\Http\Response\Unauthorized('Basic realm="Access to the staging site", charset="UTF-8');
+$res->withHeader('Content-Type', 'application/vnd.api+json;version=1')
+    ->withBody('{ "apple": "tree" }')
+    ->build()
+    ->send();
 ```
