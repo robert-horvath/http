@@ -58,9 +58,10 @@ final class MediaTypeTest extends TestCase
 
     public function testMediaType(): void
     {
-        $mt = new MediaType('application', 'prs.api.ela.do+txt+json');
-        $mt->setParameter('version', '1');
-        $mt->setParameter('q', '2');
+        $mt = new MediaType('application', 'prs.api.ela.do+txt+json', [
+            'version' => '1',
+            'q' => '2'
+        ]);
 
         $this->assertSame('application/prs.api.ela.do+txt+json;version=1;q=2', (string) $mt);
         $this->assertSame('application', $mt->type());

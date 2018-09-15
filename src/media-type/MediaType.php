@@ -103,18 +103,13 @@ final class MediaType implements MediaTypeInterface
     private $suffix = FALSE;
 
     /** @var array */
-    private $parameters = [];
+    private $parameters;
 
-    public function __construct(string $mainType, string $subType)
+    public function __construct(string $mainType, string $subType, array $parameters = [])
     {
         $this->type = $mainType;
         $this->subType = $subType;
-    }
-
-    public function setParameter(string $key, string $value): MediaTypeInterface
-    {
-        $this->parameters[$key] = $value;
-        return $this;
+        $this->parameters = $parameters;
     }
 
     public function parameter(string $key): ?string
@@ -172,18 +167,17 @@ final class MediaType implements MediaTypeInterface
 
     private static function createNewMediaType(array $data): self
     {
-        $mt = new self($data[1], $data[2]);
-        return self::parseParameters($mt, $data[3] ?? NULL);
+        return new self($data[1], $data[2], self::parseParameters($data[3] ?? NULL));
     }
 
-    private static function parseParameters(self $mt, ?string $data): self
+    private static function parseParameters(?string $data): array
     {
-        $parameters = [];
+        $parameters = $arr = [];
         if ($data !== NULL)
             parse_str(str_replace(';', '&', $data), $parameters);
         foreach ($parameters as $key => $value)
-            $mt->setParameter($key, $value);
-        return $mt;
+            $arr[$key] = $value;
+        return $arr;
     }
 
     private function implodeKeyValueArray(array $input): string

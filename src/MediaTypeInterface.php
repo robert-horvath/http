@@ -8,7 +8,7 @@ interface MediaTypeInterface
 
     static function initWithCSV(string $mediaTypeCollection): array;
 
-    function __construct(string $mainType, string $subType);
+    function __construct(string $mainType, string $subType, array $parameters = []);
 
     function __toString(): string;
 
@@ -19,6 +19,4 @@ interface MediaTypeInterface
     function structuredSyntaxSuffix(): ?string;
 
     function parameter(string $key): ?string;
-
-    function setParameter(string $key, string $value): MediaTypeInterface;
 }
