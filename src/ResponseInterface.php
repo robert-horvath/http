@@ -4,9 +4,7 @@ namespace RHo\Http;
 interface ResponseInterface
 {
 
-    function setHeader(string $header, string $value): void;
-
-    function setBody(string $body): void;
+    function __construct(int $statusCode = 200, array $headers = [], ?string $body = NULL);
 
     function send(): void;
 }

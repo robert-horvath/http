@@ -15,9 +15,8 @@ final class ResponseTest extends TestCase
     public function testBadRequest(): void
     {
         $res = new HttpResponse\BadRequest();
-        $res->setBody('test');
-        $res->setHeader('Content-Type', 'application/json;charset=UTF-8');
-        $res->send(FALSE);
+        $res->withBody('test')->withHeader('Content-Type', 'application/json;charset=UTF-8');
+        $res->build()->send();
 
         $this->assertSame(400, http_response_code());
         $headers = xdebug_get_headers();
@@ -30,8 +29,8 @@ final class ResponseTest extends TestCase
     public function testUnauthorized(): void
     {
         $res = new HttpResponse\Unauthorized('Basic realm="Access to the staging site", charset="UTF-8');
-        $res->setHeader('Content-Type', 'application/vnd.api+json;version=1');
-        $res->send(FALSE);
+        $res->withHeader('Content-Type', 'application/vnd.api+json;version=1');
+        $res->build()->send();
 
         $this->assertSame(401, http_response_code());
         $headers = xdebug_get_headers();
