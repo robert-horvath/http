@@ -1,34 +1,28 @@
 {
 	"name" : "robert/http",
 	"license" : "MIT",
+	"minimum-stability" : "dev",
 	"require" : {
-		"php" : ">=7.1"
+		"php" : ">=7.1",
+		"robert/http-request" : "master-dev",
+		"robert/http-response" : "master-dev",
+		"robert/http-header" : "master-dev",
+		"robert/stable-sort" : "dev-master"
 	},
 	"require-dev" : {
 		"phpunit/phpunit" : "^7"
 	},
 	"autoload" : {
 		"psr-4" : {
-			"RHo\\Http\\" : [
-				"src/",
-				"src/media-type/",
-				"src/request/"
-			],
-			"RHo\\Http\\Body\\" : "src/body/",
-			"RHo\\Http\\Header\\" : "src/header/",
-			"RHo\\Http\\Response\\" : "src/response/"
+			"RHo\\Http\\" : "src/"
 		}
 	},
 	"autoload-dev" : {
+		"files" : [
+			"tests/mock_functions.php"
+		],
 		"psr-4" : {
-			"RHo\\HttpTest\\" : [
-				"tests/",
-				"tests/media-type/",
-				"tests/request/",
-				"tests/response/",
-				"tests/body/",
-				"tests/header/"
-			]
+			"RHo\\HttpTest\\" : "tests/"
 		}
 	}
 }

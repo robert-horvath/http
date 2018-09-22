@@ -1,18 +1,6 @@
 <?php
 declare(strict_types = 1);
-namespace RHo\Http;
-
-function preg_match($pattern, $subject, &$matches)
-{
-    if (isset($GLOBALS['mock_preg_match']) && $GLOBALS['mock_preg_match'])
-        return FALSE;
-    return \preg_match($pattern, $subject, $matches);
-}
-
-function preg_last_error()
-{
-    return $GLOBALS['preg_last_error'] ?? \preg_last_error();
-}
+namespace RHo\Http\Request;
 
 function file_get_contents(string $fileName)
 {
